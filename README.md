@@ -442,4 +442,4 @@ The overdue threshold is controlled through an environment variable so administr
 
 ## License
 
-This project was developed as a placement assignment / portfolio project.
+This project was developed as a placement assignment.
