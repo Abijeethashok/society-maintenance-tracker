@@ -1,5 +1,5 @@
 # Society Maintenance Tracker
-LIVE LINK - https://github.com/Abijeethashok/society-maintenance-tracker
+LIVE LINK - https://society-maintenance-tracker-neon-iota.vercel.app/
 
 A production-minded society maintenance and complaint tracking platform built with **Next.js, TypeScript, Prisma, and PostgreSQL**.
 
