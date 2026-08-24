@@ -1,0 +1,1 @@
+import {describe,it,expect,vi}from"vitest";import{isOverdue}from"../src/lib/overdue";describe("overdue",()=>{it("marks unresolved old complaint overdue",()=>{vi.stubEnv("OVERDUE_THRESHOLD_DAYS","3");expect(isOverdue(new Date(Date.now()-4*86400000),"OPEN")).toBe(true)});it("does not mark resolved complaint overdue",()=>expect(isOverdue(new Date(0),"RESOLVED")).toBe(false)})

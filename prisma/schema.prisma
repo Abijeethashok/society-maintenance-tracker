@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  RESIDENT
+  ADMIN
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum ComplaintStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+enum Category {
+  ELECTRICAL
+  PLUMBING
+  CLEANING
+  MAINTENANCE
+  LIFT
+  WATER
+  OTHER
+}
+
+model User {
+  id String @id @default(cuid())
+  name String
+  email String @unique
+  passwordHash String
+  role Role @default(RESIDENT)
+  createdAt DateTime @default(now())
+  complaints Complaint[] @relation("ResidentComplaints")
+  history ComplaintHistory[] @relation("ChangedBy")
+  notices Notice[] @relation("CreatedBy")
+}
+model Complaint {
+  id String @id @default(cuid())
+  title String
+  description String
+  category Category
+  priority Priority @default(MEDIUM)
+  status ComplaintStatus @default(OPEN)
+  photoUrl String?
+  resolvedAt DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  residentId String
+  resident User @relation("ResidentComplaints", fields:[residentId], references:[id], onDelete: Cascade)
+  history ComplaintHistory[]
+  @@index([residentId, createdAt])
+  @@index([status, priority, category, createdAt])
+}
+model ComplaintHistory {
+  id String @id @default(cuid())
+  complaintId String
+  complaint Complaint @relation(fields:[complaintId], references:[id], onDelete: Cascade)
+  changedById String
+  changedBy User @relation("ChangedBy", fields:[changedById], references:[id])
+  previousStatus ComplaintStatus?
+  newStatus ComplaintStatus
+  note String?
+  createdAt DateTime @default(now())
+  @@index([complaintId, createdAt])
+}
+model Notice {
+  id String @id @default(cuid())
+  title String
+  content String
+  important Boolean @default(false)
+  createdById String
+  createdBy User @relation("CreatedBy", fields:[createdById], references:[id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index([important, createdAt])
+}

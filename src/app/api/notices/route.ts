@@ -1,0 +1,1 @@
+import { prisma } from "@/lib/prisma";import { ok } from "@/lib/errors"; export async function GET(){return ok(await prisma.notice.findMany({include:{createdBy:{select:{name:true}}},orderBy:[{important:"desc"},{createdAt:"desc"}]}));}
